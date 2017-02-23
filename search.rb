@@ -1,6 +1,7 @@
 require './lib/item.rb'
 require './lib/mailer.rb'
 require 'yaml'
+require 'pry'
 
 file = File.open(File.dirname(__FILE__) + "/config/wanted.yml", "r")
 search_items = YAML.load(file)

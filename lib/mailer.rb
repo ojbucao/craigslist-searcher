@@ -1,6 +1,7 @@
 require 'mail'
 require 'yaml'
 require 'io/console'
+require 'pry'
 
 class Mailer
   file = File.open(File.dirname(__FILE__) + "/../config/mailer.yml", 'r')
@@ -20,14 +21,18 @@ class Mailer
     delivery_method :smtp, Options
   end
 
+  attr_reader :items, :recipients, :content
+
   def initialize(items:)
     @recipients = Array(Recipients)
     @items = Array(items)
-    @content ||= build_content
+    @content = build_content
   end
 
   def send
     @recipients.each do |recipient|
+      content = self.content
+
       mail = Mail.new do
         to recipient
         from Options[:user_name]
@@ -35,7 +40,7 @@ class Mailer
 
         html_part do
           content_type 'text/html; charset=UTF-8'
-          body @content
+          body content
         end
       end
       mail.deliver
@@ -55,5 +60,6 @@ class Mailer
       content << '</ol>'
       content << '<hr>'
     end
+    content
   end
 end
