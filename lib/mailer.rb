@@ -15,16 +15,14 @@ class Mailer
     authentication: config['authentication'].to_s.to_sym,
     enable_starttls_auto: config['enable_starttls_auto'] }
 
-  Recipients = config['recipients']
-
   Mail.defaults do
     delivery_method :smtp, Options
   end
 
   attr_reader :items, :recipients, :content
 
-  def initialize(items:)
-    @recipients = Array(Recipients)
+  def initialize(items:, recipients:)
+    @recipients = Array(recipients)
     @items = Array(items)
     @content = build_content
   end
